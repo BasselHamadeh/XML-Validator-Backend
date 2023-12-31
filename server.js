@@ -1,4 +1,3 @@
-// Backend (Express Server)
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -7,7 +6,7 @@ app.use(cors());
 
 app.get('/xsd', (req, res) => {
   const xsdData = {
-    data: ["Hallo ich bins Bassel! Hallo von Backend HIHI", "Zalung"],
+    data: ["Hallo ich bins Bassel! Hallo von Backend HIHI"],
   };
 
   res.json(xsdData);
