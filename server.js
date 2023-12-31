@@ -6,7 +6,7 @@ app.use(cors());
 
 app.get('/xsd', (req, res) => {
   const xsdData = {
-    data: ["Hallo ich bins Bassel! Hallo von Backend HIHI"],
+    data: ["Hallo ich bins Bassel! Hallo von Backend"],
   };
 
   res.json(xsdData);
