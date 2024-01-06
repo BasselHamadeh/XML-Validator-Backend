@@ -1,31 +1,52 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const { Pool } = require('pg');
 require('dotenv').config();
 
 const app = express();
-
 app.use(cors());
 
-app.get('/xsd', (req, res) => {
-  const xsdData = {
-    data: ["Hallo ich bins Bassel! Hallo von Backend"]
-  };
-
-  res.json(xsdData);
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'users',
+  password: 'Syria2003!',
+  port: 5432,
 });
 
-const dbOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+app.get('/users', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM public.user_table');
+    res.json(rows);
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Benutzerdaten:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
-mongoose.connect(process.env.DB_URI, dbOptions)
-  .then(() => console.log('Database connected'))
-  .catch(err => console.error('Error connecting to database:', err));
+app.post('/users', async (req, res) => {
+  const { username, email, status, sicherheitsgruppe, password } = req.body;
 
-const PORT = process.env.PORT || 8080;
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    await client.query('INSERT INTO public.user_table(username, email, status, sicherheitsgruppe, password) VALUES($1, $2, $3, $4, $5)',
+      [username, email, status, sicherheitsgruppe, password]);
+
+    await client.query('COMMIT');
+    res.status(200).send('Benutzer erfolgreich hinzugefügt');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Fehler beim Hinzufügen des Benutzers:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    client.release();
+  }
+});
+
+const PORT = 8080;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  console.log(`Server läuft auf Port ${PORT}.`);
 });
