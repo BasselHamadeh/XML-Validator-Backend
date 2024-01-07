@@ -16,7 +16,7 @@ const pool = new Pool({
 
 app.get('/users', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM public.user_table');
+    const { rows } = await pool.query('SELECT * FROM user_table');
     res.json(rows);
   } catch (error) {
     console.error('Fehler beim Abrufen der Benutzerdaten:', error.message);
