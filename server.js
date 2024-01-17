@@ -15,52 +15,20 @@ const pool = new Pool({
   port: 5432,
 });
 
-pool.connect((err, client, release) => {
+pool.connect((err) => {
   if (err) {
     return console.error('Error acquiring client', err.stack);
   }
-  console.log('Connected to database');
-  release();
+  console.log('Connected to PostgreSQL database');
 });
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Internal Server Error' });
-});
+const userRouter = require('./routers/userRouter.jsx');
+const userInfoRouter = require('./routers/userInfoRouter.jsx');
+const xsdRouter = require('./routers/xsdRouter.jsx');
 
-app.get('/user', async (req, res, next) => {
-  try {
-    const { rows } = await pool.query('SELECT * FROM user_table');
-    res.json(rows);
-  } catch (error) {
-    next(error);
-  }
-});
-
-app.get('/xsd', async (req, res, next) => {
-  try {
-    const { rows } = await pool.query('SELECT xsd_file_name FROM xsd_files');
-    const xsdFileNames = rows.map(row => row.xsd_file_name);
-    res.json({ data: xsdFileNames });
-  } catch (error) {
-    next(error);
-  }
-});
-
-app.post('/user', async (req, res, next) => {
-  const { username, email, status, sicherheitsgruppe, password } = req.body;
-
-  try {
-    await pool.query(
-      'INSERT INTO public.user_table(username, email, status, sicherheitsgruppe, password) VALUES($1, $2, $3, $4, $5)',
-      [username, email, status, sicherheitsgruppe, password]
-    );
-
-    res.status(200).send('Benutzer erfolgreich hinzugefügt');
-  } catch (error) {
-    next(error);
-  }
-});
+app.use('/user', userRouter);
+app.use('/login', userInfoRouter);
+app.use('/xsd', xsdRouter);
 
 const PORT = 8080;
 
