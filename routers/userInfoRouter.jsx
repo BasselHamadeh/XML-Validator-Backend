@@ -1,3 +1,4 @@
+// backend/routes/user.js
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
@@ -20,12 +21,12 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const { username, email, status, sicherheitsgruppe, tag, monat, jahr, uhrzeit } = req.body;
+  const { username, email, status, sicherheitsgruppe, tag, monat, jahr, uhrzeit, login_status } = req.body;
 
   try {
     await pool.query(
-      'INSERT INTO user_login_informations (benutzername, email, status, gruppe, tag, monat, jahr, uhrzeit) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
-      [username, email, status, sicherheitsgruppe, tag, monat, jahr, uhrzeit]
+      'INSERT INTO user_login_informations (benutzername, email, status, gruppe, tag, monat, jahr, uhrzeit, login_status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+      [username, email, status, sicherheitsgruppe, tag, monat, jahr, uhrzeit, login_status]
     );
 
     res.status(200).send('Benutzer-Login-Informationen erfolgreich hinzugefügt');
