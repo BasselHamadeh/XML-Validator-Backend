@@ -1,4 +1,3 @@
-// backend/routes/user.js
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
@@ -6,14 +5,14 @@ const { Pool } = require('pg');
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'users',
+  database: 'user-database',
   password: 'Syria2003!',
   port: 5432,
 });
 
 router.get('/', async (req, res, next) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM user_login_informations');
+    const { rows } = await pool.query('SELECT * FROM user_login_table');
     res.json(rows);
   } catch (error) {
     next(error);
@@ -21,15 +20,15 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const { username, email, status, sicherheitsgruppe, tag, monat, jahr, uhrzeit, login_status } = req.body;
+  const { username, email, status, gruppe, tag, monat, jahr, uhrzeit } = req.body;
 
   try {
-    await pool.query(
-      'INSERT INTO user_login_informations (benutzername, email, status, gruppe, tag, monat, jahr, uhrzeit, login_status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-      [username, email, status, sicherheitsgruppe, tag, monat, jahr, uhrzeit, login_status]
+    const { rows } = await pool.query(
+      'SELECT * FROM user_login_table WHERE username = $1 AND email = $2 AND status = $3 AND gruppe = $4 AND tag = $5 AND monat = $6 AND jahr = $7 AND uhrzeit = $8',
+      [username, email, status, gruppe, tag, monat, jahr, uhrzeit]
     );
 
-    res.status(200).send('Benutzer-Login-Informationen erfolgreich hinzugefügt');
+    res.json(rows);
   } catch (error) {
     next(error);
   }
