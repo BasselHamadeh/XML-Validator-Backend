@@ -12,9 +12,9 @@ const pool = new Pool({
 
 router.get('/', async (req, res, next) => {
   try {
-    const { rows } = await pool.query('SELECT xsd_file_name FROM xsd_files_table');
-    const xsdFileNames = rows.map(row => row.xsd_file_name);
-    res.json({ data: xsdFileNames });
+    const { rows } = await pool.query('SELECT xsd_file_name, xsd_content FROM xsd_files_table');
+    const xsdFiles = rows.map(row => ({ fileName: row.xsd_file_name, content: row.xsd_content }));
+    res.json({ data: xsdFiles });
   } catch (error) {
     next(error);
   }
