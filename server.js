@@ -30,7 +30,7 @@ app.use('/user', userRouter);
 app.use('/login', userInfoRouter);
 app.use('/xsd', xsdRouter);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server läuft auf Port ${PORT}.`);
