@@ -14,7 +14,7 @@ const validateWithoutXSD = async (xmlData) => {
       } else {
         if (result && result.parsererror) {
           const parserErrors = result.parsererror;
-          const errorMessage = parserErrors.trim();
+          const errorMessage = parserErrors.trim().replace(/\n/g, ' ');
           reject([errorMessage]);
         } else {
           resolve(result);
