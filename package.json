@@ -20,6 +20,18 @@
     "multer": "^1.4.5-lts.1",
     "pg": "^8.11.3",
     "routes": "^2.1.0",
-    "webpack-dev-server": "^4.15.1"
-  }
+    "webpack-dev-server": "^4.15.1",
+    "xml2js": "^0.6.2",
+    "xmldom": "^0.6.0",
+    "xmllint": "^0.1.1",
+    "xsd-schema-validator": "^0.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BasselHamadeh/XML-Validator-Backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BasselHamadeh/XML-Validator-Backend/issues"
+  },
+  "homepage": "https://github.com/BasselHamadeh/XML-Validator-Backend#readme"
 }
