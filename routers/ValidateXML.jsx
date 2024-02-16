@@ -31,6 +31,7 @@ const handleValidationWithoutXSD = async (req, res) => {
     validateWithoutXSD(xmlData)
       .then((result) => {
         res.json({ success: true, validationResults: result });
+        console.log('XML is valid.');
       })
       .catch((error) => {
         console.error('Error during validation without XSD:', error);

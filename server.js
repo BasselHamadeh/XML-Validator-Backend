@@ -3,7 +3,7 @@ const cors = require('cors');
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const Ajv = require('ajv');
+const { parseXml } = require('libxmljs');
 
 const app = express();
 app.use(cors());
@@ -37,7 +37,7 @@ app.post('/validateWithoutXSD', handleValidationWithoutXSD);
 app.post('/validateWithXSD', async (req, res) => {
   try {
     const { xmlData, xsdData } = req.body;
-    const result = await validateWithXSD(xmlData, xsdData.xsd);
+    const result = await validateWithXSD(xmlData, xsdData);
     res.json({ success: true, result });
   } catch (error) {
     res.status(400).json({ success: false, errors: [error.message] });
