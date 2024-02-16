@@ -1,12 +1,9 @@
-// server.js
-
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 require('dotenv').config();
 
 const Ajv = require('ajv');
-const { validateWithXSD } = require('./routers/handleValidationWithXSD.jsx');
 
 const app = express();
 app.use(cors());
@@ -31,20 +28,19 @@ const userRouter = require('./routers/userRouter.jsx');
 const userInfoRouter = require('./routers/userInfoRouter.jsx');
 const xsdRouter = require('./routers/xsdRouter.jsx');
 const { handleValidationWithoutXSD } = require('./routers/ValidateXML.jsx');
+const { validateWithXSD } = require('./routers/handleValidationWithXSD.jsx');
 
 app.use('/user', userRouter);
 app.use('/login', userInfoRouter);
 app.use('/xsd', xsdRouter);
-
 app.post('/validateWithoutXSD', handleValidationWithoutXSD);
-
 app.post('/validateWithXSD', async (req, res) => {
   try {
     const { xmlData, xsdData } = req.body;
     const result = await validateWithXSD(xmlData, xsdData.xsd);
     res.json({ success: true, result });
   } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
+    res.status(400).json({ success: false, errors: [error.message] });
   }
 });
 
