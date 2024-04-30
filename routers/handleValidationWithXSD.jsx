@@ -1,25 +1,42 @@
 const { parseXml } = require('libxmljs');
 
-const validateWithXSD = (xmlData, xsdData) => {
-  return new Promise((resolve, reject) => {
+const validateXSD = (xsdData) => {
     try {
+        if (!xsdData) {
+            throw new Error('XSD data is not defined.');
+        }
+        parseXml(xsdData);
+        console.log('XSD is valid.');
+        return true;
+    } catch (error) {
+        console.error('Error validating XSD:', error);
+        throw new Error('Invalid XSD data.');
+    }
+};
+
+const validateWithXSD = async (xmlData, xsdData) => {
+  try {
+      const xsdIsValid = validateXSD(xsdData);
+      if (!xsdIsValid) {
+          throw new Error('Invalid XSD data.');
+      }
+
       const xmlDoc = parseXml(xmlData);
       const xsdDoc = parseXml(xsdData);
       xmlDoc.validate(xsdDoc);
 
       if (xmlDoc.validationErrors.length === 0) {
-        console.log('XML is valid.');
-        resolve({ success: true, result: xmlDoc });
+          console.log('XML is valid.');
+          return { success: true };
       } else {
-        const validationErrorMessages = xmlDoc.validationErrors.map(error => error.toString());
-        console.error('XML is not valid according to XSD:', validationErrorMessages);
-        reject({ success: false, errors: validationErrorMessages });
+          const validationErrorMessages = xmlDoc.validationErrors.map(error => error.toString());
+          console.error(validationErrorMessages);
+          throw new Error(`${validationErrorMessages}`);
       }
-    } catch (error) {
-      console.error('Error parsing XML or XSD:', error);
-      reject({ success: false, errors: [error.message] });
-    }
-  });
+  } catch (error) {
+      console.error('Error validating XML with XSD:', error);
+      throw error;
+  }
 };
 
 module.exports = { validateWithXSD };

@@ -27,7 +27,7 @@ pool.connect((err) => {
 const userRouter = require('./routers/userRouter.jsx');
 const userInfoRouter = require('./routers/userInfoRouter.jsx');
 const xsdRouter = require('./routers/xsdRouter.jsx');
-const { handleValidationWithoutXSD } = require('./routers/ValidateXML.jsx');
+const { handleValidationWithoutXSD } = require('./routers/handleValidationWithoutXSD.jsx');
 const { validateWithXSD } = require('./routers/handleValidationWithXSD.jsx');
 
 app.use('/user', userRouter);
