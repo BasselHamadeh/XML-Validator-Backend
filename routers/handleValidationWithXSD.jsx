@@ -6,11 +6,10 @@ const validateXSD = (xsdData) => {
             throw new Error('XSD data is not defined.');
         }
         parseXml(xsdData);
-        console.log('XSD is valid.');
         return true;
     } catch (error) {
         console.error('Error validating XSD:', error);
-        throw new Error('Invalid XSD data.');
+        throw new Error('XML or XSD content is missing, which is essential for the system to process data effectively.');
     }
 };
 
@@ -26,7 +25,7 @@ const validateWithXSD = async (xmlData, xsdData) => {
       xmlDoc.validate(xsdDoc);
 
       if (xmlDoc.validationErrors.length === 0) {
-          console.log('XML is valid.');
+          console.log('Based on the provided XSD schema, the XML document is determined to be valid.');
           return { success: true };
       } else {
           const validationErrorMessages = xmlDoc.validationErrors.map(error => error.toString());
