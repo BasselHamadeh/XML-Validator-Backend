@@ -44,8 +44,8 @@ app.post('/validateWithXSD', async (req, res) => {
   }
 });
 
-const updateUserPasswordRouter = require('./routers/updateUserPasswordRouter.jsx');
-app.use('/updatePassword', updateUserPasswordRouter);
+const updateUser = require('./routers/updateUser.jsx');
+app.use('/updateProfile', updateUser);
 
 const PORT = process.env.PORT || 8080;
 

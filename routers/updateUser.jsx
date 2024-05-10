@@ -19,7 +19,7 @@ function encryptPassword(password) {
 
 router.put('/:id', async (req, res, next) => {
   const { id } = req.params;
-  const { newPassword } = req.body;
+  const { username, email, newPassword } = req.body;
 
   try {
     const encryptedPassword = encryptPassword(newPassword);
@@ -31,9 +31,21 @@ router.put('/:id', async (req, res, next) => {
       return res.status(404).json({ message: 'Benutzer nicht gefunden' });
     }
 
-    await pool.query('UPDATE user_table SET password = $1 WHERE id = $2', [encryptedPassword, id]);
+    const existingUsernameQuery = await pool.query('SELECT * FROM user_table WHERE username = $1 AND id != $2', [username, id]);
+    const existingUsername = existingUsernameQuery.rows[0];
+    if (existingUsername) {
+      return res.status(400).json({ message: 'Benutzername bereits vergeben' });
+    }
 
-    res.status(200).json({ message: 'Passwort erfolgreich aktualisiert' });
+    const existingEmailQuery = await pool.query('SELECT * FROM user_table WHERE email = $1 AND id != $2', [email, id]);
+    const existingEmail = existingEmailQuery.rows[0];
+    if (existingEmail) {
+      return res.status(400).json({ message: 'E-Mail-Adresse bereits vergeben' });
+    }
+
+    await pool.query('UPDATE user_table SET username = $1, email = $2, password = $3 WHERE id = $4', [username, email, encryptedPassword, id]);
+
+    res.status(200).json({ message: 'Profil erfolgreich aktualisiert' });
   } catch (error) {
     next(error);
   }
