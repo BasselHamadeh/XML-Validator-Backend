@@ -21,12 +21,12 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const { username, email, status, gruppe, tag, monat, jahr, uhrzeit } = req.body;
+  const { email, status, gruppe, tag, monat, jahr, uhrzeit } = req.body;
 
   try {
     const { rows } = await pool.query(
-      'SELECT * FROM user_login_table WHERE username = $1 AND email = $2 AND status = $3 AND gruppe = $4 AND tag = $5 AND monat = $6 AND jahr = $7 AND uhrzeit = $8',
-      [username, email, status, gruppe, tag, monat, jahr, uhrzeit]
+      'SELECT * FROM user_login_table WHERE email = $1 AND status = $2 AND gruppe = $3 AND tag = $4 AND monat = $5 AND jahr = $6 AND uhrzeit = $7',
+      [email, status, gruppe, tag, monat, jahr, uhrzeit]
     );
 
     res.json(rows);
