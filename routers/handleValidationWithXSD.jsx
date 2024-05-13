@@ -15,6 +15,10 @@ const validateXSD = (xsdData) => {
 
 const validateWithXSD = async (xmlData, xsdData) => {
   try {
+      if (!xmlData || !xsdData) {
+          throw new Error('XML or XSD content is missing, which is essential for the system to process data effectively.');
+      }
+      
       const xsdIsValid = validateXSD(xsdData);
       if (!xsdIsValid) {
           throw new Error('Invalid XSD data.');

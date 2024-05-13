@@ -21,7 +21,7 @@ pool.connect((err) => {
   if (err) {
     return console.error('Error acquiring client', err.stack);
   }
-  console.log('Connected to PostgreSQL!');
+  console.log('Connected to PostgreSQL database!');
 });
 
 const userRouter = require('./routers/userRouter.jsx');
@@ -50,5 +50,5 @@ app.use('/updateProfile', updateUser);
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on Port ${PORT}.`);
+  console.log(`The server is running at http://localhost:${PORT}.`);
 });
