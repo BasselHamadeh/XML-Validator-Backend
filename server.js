@@ -21,7 +21,7 @@ pool.connect((err) => {
   if (err) {
     return console.error('Error acquiring client', err.stack);
   }
-  console.log('Connected to PostgreSQL database!');
+  console.log('Connected to PostgreSQL database!\n');
 });
 
 const userRouter = require('./routers/userRouter.jsx');
