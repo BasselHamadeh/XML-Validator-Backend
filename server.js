@@ -47,7 +47,7 @@ app.post('/validateWithXSD', async (req, res) => {
 const updateUser = require('./routers/updateUser.jsx');
 app.use('/updateProfile', updateUser);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`The server is running at http://localhost:${PORT}.`);
